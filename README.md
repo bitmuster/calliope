@@ -26,8 +26,8 @@ Here is the state of the supported hardware:
 |------------|-------|
 | RTT | Works |
 | Leds | Techdemo |
-| WS812b | Techdemo |
-| BMX055 | Techdemo |
+| WS2812b (RGB LED) | Techdemo |
+| BMX055 (I2C gyroscope, accelerometer and magnetometer)  | Techdemo |
 | Speaker | Techdemo |
 | Microphone | No operation |
 | Touch input | No operation |
