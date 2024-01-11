@@ -1,5 +1,5 @@
 
-# Calliope
+# Calliope Board support crate
 
 This project should become a board support crate for the
 Calliope mini.
@@ -17,6 +17,19 @@ crate and examples from the rust discovery book.
 Warning: I'm still learning embedded Rust and HAL design, so none of
 this looks good yet!
 
+# ToDo
+
+* Improve many things
+* Demos are bypassing the board support crates functions
+* Bring microphone to operation
+* Bring buttons to operation
+* Bring analog input to operation
+* Bring microphone to operation
+* Bring touch input to operation
+* Bring radio to operation
+* Bring microphone to operation
+
+
 # References
 
 References:
@@ -25,6 +38,10 @@ References:
 * https://crates.io/crates/nrf51-hal
 * https://crates.io/crates/microbit
 * https://docs.rust-embedded.org/discovery/microbit/
+
+Developer Setup:
+
+* https://docs.rust-embedded.org/discovery/microbit/03-setup/index.html
 
 Dependencies:
 
