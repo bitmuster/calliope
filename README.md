@@ -35,6 +35,11 @@ Here is the state of the supported hardware:
 | Radio | No operation |
 | Analog input | No operation |
 
+# Repositories
+
+* https://gitlab.com/bitmuster/calliope
+* https://github.com/bitmuster/calliope
+
 # ToDo
 
 * Improve many things
