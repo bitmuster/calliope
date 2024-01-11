@@ -1,8 +1,8 @@
 
-# Calliope Board support crate
+# Calliope Board Support Crate
 
 This project should become a board support crate for the
-Calliope mini.
+[Calliope mini](https://calliope.cc) single board computer.
 
 At current, it is very beta!
 
