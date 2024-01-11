@@ -21,8 +21,6 @@ pub use board::Board;
 
 pub use crate::board::*;
 
-
-
 // Experimental unsafe beep function that bypasses not yet existing
 // hal functionality.
 // ToDo: Improve a lot
@@ -83,8 +81,8 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
     let pin_cnf_18 = 0x50000000usize + 0x748usize;
     let ptr_pin_cnf_18 = pin_cnf_18 as *mut u32;
 
-    let pin_cnf_22 = 0x50000000usize + 0x758usize;
-    let ptr_pin_cnf_22 = pin_cnf_22 as *mut u32;
+    //let pin_cnf_22 = 0x50000000usize + 0x758usize;
+    //let ptr_pin_cnf_22 = pin_cnf_22 as *mut u32;
 
     let outset : u32 = 0x50000000 + 0x508;
 
@@ -97,7 +95,8 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
     //unsafe { core::ptr::write_volatile(ptr_pin_cnf_22, 1u32 << 0) }
     //let pin :u32 = 1u32 << 22;
 
-    let mut index: u32 = 0;
+    //let mut index: u32 = 0;
+    let index: u32 = 0;
 
     unsafe {
 
@@ -172,7 +171,7 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
             "2:", // End label
 
             in(reg) val,
-            inout(reg) index,
+            in(reg) index,
             in(reg) pin,
             in(reg) outset,
             in(reg) outclr,

@@ -24,19 +24,14 @@ enum LedState {
 
 fn animation <T :Instance, U>( timer : &mut Timer<T,U>) -> ! {
 
-    let mut r:u8 = 0;
-    let mut g:u8 = 0;
-    let mut b:u8 = 0;
-
     let max = 0x20;
     let min = 0x00;
-
     let d = 50u16;
-
-    let value =0;
     let mut state: LedState = LedState::GreenToYellow;
 
-    g = max;
+    let mut g:u8 = max;
+    let mut r:u8 = 0;
+    let mut b:u8 = 0;
 
     loop{
 
@@ -95,13 +90,13 @@ fn main() -> ! {
     let board = Board::take().unwrap();
     let mut timer = Timer::new(board.TIMER0);
 
-    rprintln!("Hello World");
+    rprintln!("Hello RGB LED");
 
     let delay = 1000u32;
 
-    let mut r:u8 = 0x20;
-    let mut g:u8 = 0x00;
-    let mut b:u8 = 0x20;
+    let mut r:u8;
+    let mut g:u8;
+    let mut b:u8;
     
     r=0x20; g=0x00; b=0x00;
     set_ws2812(r,g,b);
