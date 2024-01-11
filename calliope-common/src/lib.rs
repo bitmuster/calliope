@@ -23,6 +23,9 @@ pub use crate::board::*;
 // hal functionality.
 pub fn beep<T :Instance, U>(timer: &mut Timer<T,U>) {
 
+    let pin_cnf_28 = 0x50000000usize + 0x770usize;
+    let ptr_pin_cnf_28 = pin_cnf_28 as *mut u32;
+
     let pin_cnf_29 = 0x50000000usize + 0x774usize;
     let ptr_pin_cnf_29 = pin_cnf_29 as *mut u32;
 
@@ -36,13 +39,18 @@ pub fn beep<T :Instance, U>(timer: &mut Timer<T,U>) {
     let ptr_outclr = outclr as *mut u32;
 
     let dirset = 0x50000000usize + 0x518usize;
-    let ptr_dirset = outclr as *mut u32;
+    let ptr_dirset = dirset as *mut u32;
 
+    unsafe { core::ptr::write_volatile(ptr_dirset, 1u32 << 28) }
     unsafe { core::ptr::write_volatile(ptr_dirset, 1u32 << 29) }
     unsafe { core::ptr::write_volatile(ptr_dirset, 1u32 << 30) }
 
+    unsafe { core::ptr::write_volatile(ptr_pin_cnf_28, 1u32 << 0) }
     unsafe { core::ptr::write_volatile(ptr_pin_cnf_29, 1u32 << 0) }
     unsafe { core::ptr::write_volatile(ptr_pin_cnf_30, 1u32 << 0) }
+
+    // set sleep of DRV8837 to 1
+    unsafe { core::ptr::write_volatile(ptr_outset, 1u32 << 28) }
 
     let delay : u32 = 300;
     for i in 1..100 {
