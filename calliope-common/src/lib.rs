@@ -10,7 +10,7 @@ use core::arch::asm;
 
 pub use nrf51_hal as hal;
 
-pub use hal::pac;
+pub use hal::pac as pac;
 // pub use hal::pac::Peripherals;
 
 
@@ -95,7 +95,7 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
     //unsafe { core::ptr::write_volatile(ptr_pin_cnf_22, 1u32 << 0) }
     //let pin :u32 = 1u32 << 22;
 
-    //let mut index: u32 = 0;
+    //let mut index: u32 = 0; Avoid compiler warning
     let index: u32 = 0;
 
     unsafe {
@@ -178,5 +178,30 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
         );
     }
 }
+
+//Ways to access ports (examples)
+
+pub fn pin4_set_high_outset() {
+    let outset = 0x50000000usize + 0x508usize;
+    let ptr_outset = outset as *mut u32;
+    unsafe { core::ptr::write_volatile(ptr_outset, 1u32 << 4) }
+}
+
+pub fn pin4_set_high_gpio() {
+    unsafe { (*pac::GPIO::ptr()).outset.write(|w| w.bits(1u32 << 4)); }
+}
+
+pub fn pin4_set_high_asm() {
+    let outset : u32 = 0x50000000 + 0x508;
+    let pin :u32 = 1u32 << 4;
+    unsafe{
+        asm!(
+            "STR  {1}, [{0}]",
+            in(reg) outset,
+            in(reg) pin,
+        );
+    }
+}
+
 
 
