@@ -9,14 +9,14 @@ use calliope::Board;
 use calliope::beep;
 
 use calliope::hal::timer::Timer;
-use calliope::hal::pac::TIMER0;
+//use calliope::hal::pac::TIMER0;
 
 #[entry]
 fn main() -> ! {
     rtt_init_print!();
     rprintln!("Hello World");
 
-    let mut board = Board::take().unwrap();
+    let board = Board::take().unwrap();
     let mut timer = Timer::new(board.TIMER0);
 
     beep(&mut timer);

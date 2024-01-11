@@ -53,7 +53,7 @@ pub fn beep<T :Instance, U>(timer: &mut Timer<T,U>) {
     unsafe { core::ptr::write_volatile(ptr_outset, 1u32 << 28) }
 
     let delay : u32 = 300;
-    for i in 1..100 {
+    for _i in 1..100 {
             unsafe { core::ptr::write_volatile(ptr_outset, 1u32 << 30) }
             unsafe { core::ptr::write_volatile(ptr_outclr, 1u32 << 29) }
             timer.delay_us(delay);
