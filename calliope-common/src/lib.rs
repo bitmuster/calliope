@@ -6,6 +6,8 @@ use nrf51_hal::Timer;
 use crate::hal::timer::Instance;
 use nrf51_hal::prelude::_embedded_hal_blocking_delay_DelayUs;
 
+use core::arch::asm;
+
 pub use nrf51_hal as hal;
 
 pub use hal::pac;
@@ -19,8 +21,11 @@ pub use board::Board;
 
 pub use crate::board::*;
 
+
+
 // Experimental unsafe beep function that bypasses not yet existing
 // hal functionality.
+// ToDo: Improve a lot
 pub fn beep<T :Instance, U>(timer: &mut Timer<T,U>) {
 
     let pin_cnf_28 = 0x50000000usize + 0x770usize;
@@ -62,4 +67,117 @@ pub fn beep<T :Instance, U>(timer: &mut Timer<T,U>) {
             timer.delay_us(delay);
     }
 }
+
+// Set a color on the WS2812
+// Needs inline assembler due to critical timing
+// ToDo: Bug: Seems to set the wrong color directly after poweron?
+// ToDo: Improve and check timing
+// ToDo: Try the same with SPI
+// ToDo: Try to improve to run N Leds on a GPIO
+pub fn set_ws2812( r:u8, g: u8, b:u8) {
+
+    let val = ((g as u32) << 24) + ((r as u32) << 16) + ((b as u32) << 8);
+
+    //rprintln!("Value {:08x}", val);
+
+    let pin_cnf_18 = 0x50000000usize + 0x748usize;
+    let ptr_pin_cnf_18 = pin_cnf_18 as *mut u32;
+
+    let pin_cnf_22 = 0x50000000usize + 0x758usize;
+    let ptr_pin_cnf_22 = pin_cnf_22 as *mut u32;
+
+    let outset : u32 = 0x50000000 + 0x508;
+
+    let outclr : u32 = 0x50000000 + 0x50C;
+
+    // Enable pin 18 as output
+    unsafe { core::ptr::write_volatile(ptr_pin_cnf_18, 1u32 << 0) }
+    let pin :u32 = 1u32 << 18;
+    //To test: switch to test port 3 -> pin 22
+    //unsafe { core::ptr::write_volatile(ptr_pin_cnf_22, 1u32 << 0) }
+    //let pin :u32 = 1u32 << 22;
+
+    let mut index: u32 = 0;
+
+    unsafe {
+
+        //val = val +1;
+
+        asm!(
+            "1:", // preamble
+
+            "ADDS {1}, {1}, #1",
+            "CMP {1}, #24",
+            "BHI 2f",
+
+            "LSLS {0}, {0}, #1",
+            "BCS 4f",
+
+            //send zero
+
+            // set pin
+            "STR  {2}, [{3}]",
+
+            // wait 0.4 us
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+
+            // clear pin
+            "STR  {2}, [{4}]",
+
+            // wait 0.8 us
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            // Four nop removed from calculated wait time due to the
+            // preamble with some instructions.
+            //"nop",
+            //"nop",
+            //"nop",
+            //"nop",
+
+            "B 1b",
+
+            //send one
+            "4:",
+            // set pin
+            "STR  {2}, [{3}]",
+
+            // wait 0.8 us
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+
+            // clear pin
+            "STR  {2}, [{4}]",
+
+            // wait 0.4 us
+            // Four nop removed from calculated wait time due to the
+            // preamble with some instructions.
+            //"nop",
+            //"nop",
+            //"nop",
+            //"nop",
+
+            "B 1b",
+
+            "2:", // End label
+
+            in(reg) val,
+            inout(reg) index,
+            in(reg) pin,
+            in(reg) outset,
+            in(reg) outclr,
+        );
+    }
+}
+
 
