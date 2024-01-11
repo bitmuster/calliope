@@ -19,6 +19,7 @@ fn main() -> ! {
     let board = Board::take().unwrap();
     let mut timer = Timer::new(board.TIMER0);
 
+    rprintln!("Here comes the beep");
     beep(&mut timer);
 
     loop {}
