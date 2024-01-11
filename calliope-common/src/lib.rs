@@ -179,7 +179,7 @@ pub fn set_ws2812( r:u8, g: u8, b:u8) {
     }
 }
 
-//Ways to access ports (examples)
+//Ways to access ports(examples)
 
 pub fn pin4_set_high_outset() {
     let outset = 0x50000000usize + 0x508usize;
