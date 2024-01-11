@@ -1,0 +1,14 @@
+[package]
+name = "i2c_bmx055"
+version = "0.0.1"
+authors = ["Michael Abel <mabel@bitmuster.org>"]
+edition = "2021"
+
+[dependencies]
+cortex-m = "0.7.3"
+cortex-m-rt = "0.7.0"
+rtt-target = { version =  "0.3.1", features = ["cortex-m"] }
+panic-rtt-target = { version =  "0.1.2", features = ["cortex-m"] }
+
+# move dependency to hal
+nrf51-hal = "0.14.1"
